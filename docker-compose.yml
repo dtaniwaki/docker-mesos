@@ -1,23 +1,31 @@
 version: '3'
 services:
+  zk:
+    image: 'zookeeper:3.4'
+    networks:
+      - docker-mesos
+    ports:
+      - 2181:2181
   mesos-master:
     build:
       context: 'mesos-master'
       args:
         MESOS_VERSION: 1.4.0-2.0.1
-    command: mesos-master --registry=in_memory --port=5050 --log_dir=/var/run/log/mesos
+    command: mesos-master --registry=in_memory --port=5050 --zk=zk://zk:2181/mesos
     networks:
       - docker-mesos
     ports:
       - 5050:5050
     expose:
       - 5050
+    depends_on:
+      - zk
   mesos-slave:
     build:
       context: 'mesos-slave'
       args:
         MESOS_VERSION: 1.4.0-2.0.1
-    command: mesos-slave --port=5051 --master=http://mesos-master:8080
+    command: mesos-slave --port=5051 --master=zk://zk:2181/mesos --work_dir=/sandbox --hostname=localhost
     networks:
       - docker-mesos
     depends_on:
@@ -33,7 +41,7 @@ services:
       context: 'marathon'
       args:
         MARATHON_VERSION: 1.5.1
-    command: --master http://mesos-master:8080
+    command: --master zk://zk:2181/mesos --zk zk://zk:2181/marathon
     networks:
       - docker-mesos
     depends_on:
