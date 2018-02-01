@@ -29,4 +29,4 @@ RUN apt-get clean
 EXPOSE 8080
 WORKDIR /opt/marathon
 CMD ["--help"]
-ENTRYPOINT ["/opt/marathon/bin/start"]
+ENTRYPOINT ["/opt/marathon/bin/marathon"]
