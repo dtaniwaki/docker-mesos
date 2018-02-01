@@ -26,6 +26,7 @@ services:
       args:
         MESOS_VERSION: 1.4.0-2.0.1
     command: mesos-slave --port=5051 --master=zk://zk:2181/mesos --work_dir=/sandbox --hostname=localhost
+    privileged: true
     networks:
       - docker-mesos
     depends_on:
@@ -34,6 +35,8 @@ services:
       - 5051:5051
     expose:
       - 5051
+    volumes:
+      - mesos-work:/sandbox
     depends_on:
       - mesos-master
   marathon:
@@ -52,3 +55,5 @@ services:
       - 8080
 networks:
   docker-mesos:
+volumes:
+  mesos-work:
