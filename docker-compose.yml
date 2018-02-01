@@ -1,0 +1,46 @@
+version: '3'
+services:
+  mesos-master:
+    build:
+      context: 'mesos-master'
+      args:
+        MESOS_VERSION: 1.4.0-2.0.1
+    command: mesos-master --registry=in_memory --port=5050 --log_dir=/var/run/log/mesos
+    networks:
+      - docker-mesos
+    ports:
+      - 5050:5050
+    expose:
+      - 5050
+  mesos-slave:
+    build:
+      context: 'mesos-slave'
+      args:
+        MESOS_VERSION: 1.4.0-2.0.1
+    command: mesos-slave --port=5051 --master=http://mesos-master:8080
+    networks:
+      - docker-mesos
+    depends_on:
+      - mesos-master
+    ports:
+      - 5051:5051
+    expose:
+      - 5051
+    depends_on:
+      - mesos-master
+  marathon:
+    build:
+      context: 'marathon'
+      args:
+        MARATHON_VERSION: 1.5.1
+    command: --master http://mesos-master:8080
+    networks:
+      - docker-mesos
+    depends_on:
+      - mesos-master
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+networks:
+  docker-mesos:
