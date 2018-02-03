@@ -24,6 +24,7 @@ RUN mkdir -p /opt/marathon && tar xzf /tmp/marathon.tgz -C /opt/marathon --strip
 ## Clean up cached packages
 RUN apt autoremove -y
 RUN apt-get clean
+RUN rm -fr /var/lib/apt/lists/*
 
 # Misc
 EXPOSE 8080

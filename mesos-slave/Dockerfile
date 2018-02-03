@@ -28,6 +28,7 @@ RUN apt-get update -q && apt-get install -y -q mesos=$MESOS_VERSION
 ## Clean up cached packages
 RUN apt autoremove -y
 RUN apt-get clean
+RUN rm -fr /var/lib/apt/lists/*
 
 # Misc
 # Create anonymous user
