@@ -14,7 +14,7 @@ RUN apt-get update -q \
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 RUN apt-key fingerprint 0EBFCD88
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
-RUN apt-get update -q && apt-get install -y -q docker-ce=17.03.1~ce-0~ubuntu-xenial
+RUN apt-get update -q && apt-get install -y -q docker-ce=17.12.0~ce-0~ubuntu
 
 ## Install Mesos
 ARG MESOS_VERSION
