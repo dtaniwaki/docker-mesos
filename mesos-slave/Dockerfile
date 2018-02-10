@@ -35,3 +35,6 @@ RUN rm -fr /var/lib/apt/lists/*
 ARG USER_NAME=anonymous
 ARG USER_UID=1000
 RUN adduser --system --no-create-home --disabled-password --gecos "" --uid $USER_UID $USER_NAME
+
+# Define docker store as a volume to avoid error of unarchiving Docker images by tar command on OverlayFS.
+#   https://github.com/docker/hub-feedback/issues/727
